@@ -29,17 +29,6 @@ def generate_ascii():
         output_string = ""
         output_scaling = int((100/size_scale.get()))
 
-        for i in range(0, im.height, output_scaling):
-            for j in range(0, im.width, output_scaling):
-                lum = im.getpixel((j, i))/255
-                try:
-                    value = charset[math.ceil(lum*len(charset))-1]
-                except IndexError:
-                    print(f"Error for i={i}, j={j}:\nvalue = charset[math.floor({lum}*{len(charset)}]\n"
-                          f"-> value = charset[math.floor({lum*len(charset)})")
-                output_string += value
-            output_string += "\n"
-
         # cleaning previous output
         ascii_output.delete(1.0, tk.END)
 
@@ -49,6 +38,17 @@ def generate_ascii():
                                                               ".txt file output method when generating ASC-II or "
                                                               "use a smaller resolution.")
         else:
+            for i in range(0, im.height, output_scaling):
+                for j in range(0, im.width, output_scaling):
+                    lum = im.getpixel((j, i)) / 255
+                    try:
+                        value = charset[math.ceil(lum * len(charset)) - 1]
+                    except IndexError:
+                        print(f"Error for i={i}, j={j}:\nvalue = charset[math.floor({lum}*{len(charset)}]\n"
+                              f"-> value = charset[math.floor({lum * len(charset)})")
+                    output_string += value
+                output_string += "\n"
+
             # resizing text widget to new size for output
             ascii_output.configure(width=math.ceil(im.width / output_scaling),
                                    height=math.floor(im.height / output_scaling))
